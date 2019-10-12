@@ -1,0 +1,1 @@
+* Make sure the graph is connected before using `while(!queue.empty())`. Otherwise, use `while(distance[queue.front()] < INF)`.

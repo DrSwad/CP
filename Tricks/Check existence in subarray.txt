@@ -1,0 +1,1 @@
+If the query of checking if certain elements exist in some subarray occurs a lot and the number of elements is relatively low, then we can calculate the prefix sum of occurrence for each possible value of element and on query, check if that certain element's prefix sum for that subarray is 0 or not.
