@@ -16,15 +16,14 @@ public:
 	long long getCell(int row, int col) const;
 	matrix operator * (const matrix &m) const; // Returns a new matrix as the result of this->mat x m
 	matrix operator ^ (long long e) const; // Returns a new matrix as the result of this->mat ^ m
-
-	void debug() const {
-		for (int i = 0; i < this->totalRows(); i++) {
-			for (int j = 0; j < this->totalColumns(); j++) {
-				cerr << this->mat[i][j] << " ";
+	friend ostream& operator<<(ostream& os, const matrix &m) {
+		for (int i = 0; i < m.totalRows(); i++) {
+			for (int j = 0; j < m.totalColumns(); j++) {
+				os << m.mat[i][j] << " ";
 			}
-			cerr << endl;
+			os << endl;
 		}
-		cerr << endl;
+		return os;
 	}
 };
 void matrix::setDimensions(int row, int col) {
@@ -101,5 +100,5 @@ int main() {
 	m.setDimensions(2, 2);
 	m.setCell(0, 0, 1);
 	m.setCell(1, 1, 2);
-	m.debug();
+	cerr << m;
 }
