@@ -2,25 +2,39 @@
 
 using namespace std;
 
-#ifdef LOCAL
-#include "debug.h"
-#endif
-
 typedef long long ll;
-
+typedef unsigned int uint;
 typedef pair<int, int> pii;
 #define x first
 #define y second
 
-const int N = int(1e5) + 10;
-const int K = 105;
-const int INF = int(1e9);
+#ifdef LOCAL
+#include "debug.h"
+#endif
 
-int n, k;
-int a[N];
-int l[N];
-int dp[K][N];
-int st[N], st_len;
+const int N = 205;
+
+int n;
+pii x[N], y[N];
+map<pii, int> slope_cnt;
+
+int gcd(int a, int b) {
+	if (a < b) swap(a, b);
+	while (b != 0) {
+		int _a = a;
+		a = b;
+		b = _a % b;
+	}
+	return a;
+}
+
+int trapezoids() {
+
+}
+
+int parallelograms() {
+
+}
 
 int main() {
 	#ifdef LOCAL
@@ -28,34 +42,24 @@ int main() {
 	freopen("out", "w", stdout);
 	#endif
 
-	cin >> n >> k;
-	for (int i = 1; i <= n; i++) scanf("%d", &a[i]);
+	int t;
+	cin >> t;
 
-	for (int i = 1; i <= n; i++) {
-		int at = i - 1;
-		while (at > 0 && a[at] < a[i]) at = l[at];
-		l[i] = at;
-	}
+	for (int cs = 1; cs <= t; cs++) {
+		scanf("%d", &n);
+		for (int i = 1; i <= n; i++) scanf("%d %d", &x[i], &y[i]);
 
-	fill(&dp[0][0], &dp[K][0], INF);
-	dp[0][0] = 0;
-
-	for (int _k = 1; _k <= k; _k++) {
-		st_len = 0;
-		for (int i = 0; i < _k; i++) {
-			while (st_len > 0 && dp[_k - 1][st[st_len - 1]] >= dp[_k - 1][i]) st_len--;
-			st[st_len++] = i;
+		for (int i = 1; i <= n; i++) {
+			for (int j = i + 1; j <= n; j++) {
+				int dx = abs(x[i] - x[j]);
+				int dy = abs(y[i] - y[j]);
+				int dg = gcd(dx, dy);
+				slope_cnt[make_pair(dx / dg, dy / dg)]++;
+			}
 		}
-		for (int i = _k; i <= n; i++) {
-			int at = lower_bound(st, st + st_len, l[i]) - st;
-			dp[_k][i] = min(a[i] + dp[_k - 1][st[at]], dp[_k][l[i]]);
 
-			while (st_len > 0 && dp[_k - 1][st[st_len - 1]] >= dp[_k - 1][i]) st_len--;
-			st[st_len++] = i;
-		}
+		printf("Case %d: %d\n", cs, trapezoids() - 2 * parallelograms);
 	}
-
-	cout << dp[k][n] << endl;
 
 	return 0;
 }
