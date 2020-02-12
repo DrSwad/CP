@@ -62,7 +62,7 @@ int main()
     return 0; 
 } 
 
-** cin.ws and cin.peek **
+** cin.ws, cin.peek, cin.putback **
 
 // istream::peek example
 #include <iostream>     // std::cin, std::cout
@@ -75,20 +75,21 @@ int main () {
 	std::cout.flush();    // ensure output is written
 
 	std::cin >> std::ws;  // eat up any leading white spaces
+	// char c = cin.get();
 	int c = std::cin.peek();  // peek character
 
-	if ( c == EOF ) return 1;
-	if ( std::isdigit(c) )
-	{
-	int n;
-	std::cin >> n;
-	std::cout << "You entered the number: " << n << '\n';
+	if (c == EOF) return 1;
+	if (std::isdigit(c)) {
+		// cin.putback(c);
+		int n;
+		std::cin >> n;
+		std::cout << "You entered the number: " << n << '\n';
 	}
-	else
-	{
-	std::string str;
-	std::cin >> str;
-	std::cout << "You entered the word: " << str << '\n';
+	else {
+		// cin.putback(c);
+		std::string str;
+		std::cin >> str;
+		std::cout << "You entered the word: " << str << '\n';
 	}
 
 	return 0;

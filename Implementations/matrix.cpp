@@ -3,56 +3,64 @@
 
 using namespace std;
 
-const int MOD = 1e9 + 7;
+typedef unsigned int uint;
 
+template<typename T>
 class matrix {
 private:
-	vector< vector<long long> > mat; // Matrix is 0 indexed
+	vector< vector<T> > mat; // Matrix is 0 indexed
 public:
+	const int MOD = int(1e9) + 7;
 	void setDimensions(int row, int col);
 	int totalRows() const;
 	int totalColumns() const;
-	void setCell(int row, int col, long long val);
-	long long getCell(int row, int col) const;
+	void setCell(int row, int col, T val);
+	T getCell(int row, int col) const;
 	matrix operator * (const matrix &m) const; // Returns a new matrix as the result of this->mat x m
 	matrix operator ^ (long long e) const; // Returns a new matrix as the result of this->mat ^ m
 	friend ostream& operator<<(ostream& os, const matrix &m) {
 		for (int i = 0; i < m.totalRows(); i++) {
 			for (int j = 0; j < m.totalColumns(); j++) {
-				os << m.mat[i][j] << " ";
+				os << m.mat[(uint)i][(uint)j] << " ";
 			}
 			os << endl;
 		}
 		return os;
 	}
 };
-void matrix::setDimensions(int row, int col) {
-	this->mat = vector< vector<long long> >(row, vector<long long>(col, 0));
+template<typename T>
+void matrix<T>::setDimensions(int row, int col) {
+	this->mat = vector< vector<T> >((uint)row, vector<T>((uint)col, 0));
 }
-int matrix::totalRows() const {
-	return this->mat.size();
+template<typename T>
+int matrix<T>::totalRows() const {
+	return (int)this->mat.size();
 }
-int matrix::totalColumns() const {
+template<typename T>
+int matrix<T>::totalColumns() const {
 	assert(this->mat.size() > 0);
-	return this->mat[0].size();
+	return (int)this->mat[0].size();
 }
-void matrix::setCell(int row, int col, long long val) {
+template<typename T>
+void matrix<T>::setCell(int row, int col, T val) {
 	assert(row < this->totalRows());
 	assert(col < this->totalColumns());
-	this->mat[row][col] = val % MOD;
+	this->mat[(uint)row][(uint)col] = val % MOD;
 }
-long long matrix::getCell(int row, int col) const {
+template<typename T>
+T matrix<T>::getCell(int row, int col) const {
 	assert(row < this->totalRows());
 	assert(col < this->totalColumns());
 	return this->mat[row][col];
 }
-matrix matrix::operator * (const matrix &m) const {
+template<typename T>
+matrix<T> matrix<T>::operator * (const matrix &m) const {
 	int rows = this->totalRows();
 	int cols = m.totalColumns();
 	int comm = this->totalColumns();
 	assert(this->totalColumns() == m.totalRows());
 
-	vector< vector<long long> > ret(rows, vector<long long>(cols, 0));
+	vector< vector<T> > ret(rows, vector<T>(cols, 0));
 
 	for (int r = 0; r < rows; r++)
 	for (int c = 0; c < cols; c++) {
@@ -73,7 +81,8 @@ matrix matrix::operator * (const matrix &m) const {
 
 	return retMat;
 }
-matrix matrix::operator ^ (long long e) const {
+template<typename T>
+matrix<T> matrix<T>::operator ^ (long long e) const {
 	matrix ret;
 	assert(this->totalRows() == this->totalColumns());
 
@@ -96,7 +105,7 @@ matrix matrix::operator ^ (long long e) const {
 }
 
 int main() {
-	matrix m;
+	matrix<long long> m;
 	m.setDimensions(2, 2);
 	m.setCell(0, 0, 1);
 	m.setCell(1, 1, 2);
