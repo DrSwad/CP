@@ -1,7 +1,7 @@
 import os
 import sys
 
-for i in range(1000):
+for i in range(100000):
     # os.system('./generator ' + str(seed) + ' > input.txt')
     os.system('./generator')
     # open("in", "w").write(str(i)
