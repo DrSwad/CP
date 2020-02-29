@@ -3,7 +3,6 @@
 using namespace std;
 
 typedef long long ll;
-typedef unsigned int uint;
 typedef pair<int, int> pii;
 #define x first
 #define y second
