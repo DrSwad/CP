@@ -1,0 +1,2 @@
+memset(arr, (char)0x7f, sizeof arr); // positive infinity
+memset(arr, (char)0x80, sizeof arr); // negative infinity

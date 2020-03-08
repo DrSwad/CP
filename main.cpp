@@ -11,6 +11,8 @@ typedef pair<int, int> pii;
 #include "debug.h"
 #endif
 
+const int N = int(1e5) + 10;
+
 
 
 int main() {

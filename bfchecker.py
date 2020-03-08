@@ -1,11 +1,11 @@
 import os
 import sys
 
-for i in range(100000):
+for i in range(1000):
     # os.system('./generator ' + str(seed) + ' > input.txt')
     os.system('./generator')
-    # open("in", "w").write(str(i)
-    os.system('./main')
+    # open("in", "w").write(str(i))
+    os.system('./F')
     os.system('./bf')
     if open('bfout').read() != open('out').read():
             sys.stderr.write('Case %d: WA' % (i + 1))
