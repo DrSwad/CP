@@ -8,7 +8,7 @@ typedef pair<int, int> pii;
 #define y second
 
 #ifdef LOCAL
-#include "debug.h"
+#include "/Users/swad/Desktop/CP/debug.h"
 #endif
 
 const int N = int(1e5) + 10;
