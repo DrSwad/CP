@@ -1,0 +1,3 @@
+Suppose our hungarian algorithm finds the maximum matching, but it follows the constraint that every row must be matched with a column. 
+But if our problem doesn't require every row to be matched and some cells in the sample are negative, then the algorithm might return smaller matchings.
+In that case, just replace all the negative cells with 0 and then run the algorithm. This way all those negative cells are as good as being ignored by the algorithm.

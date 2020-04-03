@@ -1,0 +1,24 @@
+# Max Flow Notes
+## Problem statement
+We are given a network - a directed graph, in which every edge has a certain capacity c associated with it, a starting vertex (the source), and an ending vertex (the sink). We are asked to associate another value f satisfying f <= c for each edge such that for every vertex other than the source and the sink, the sum of the values associated to the edges that enter it must equal the sum of the values associated to the edges that leave it. We will call f the flow along that edge. Furthermore, we are asked to maximise the sum of the values associated to the arcs leaving the source, which is the total flow in the network.
+
+## Definitions
+* *Residual network:* Consider an arbitrary flow in a network. The residual network has the same vertices as the original network, and one or two edges for each edge in the original. More specifically, if the flow along the edge x-y is less than the capacity there is a forward edge x-y with a capacity equal to the difference between the capacity and the flow (this is called the residual capacity), and if the flow is positive there is a backward edge y-x with a capacity equal to the flow on x-y.
+
+* *Augmenting path:* An augmenting path is simply a path from the source to the sink in the residual network, whose purpose is to increase the flow in the original one.
+
+* *Path capacity:* The path capacity of a path is the minimum capacity of an edge along that path.
+
+* *Cut:* A cut in a flow network is simply a partition of the vertices in two sets, let’s call them A and B, in such a way that the source vertex is in A and the sink is in B.
+
+* *Capacity of a cut:* The capacity of a cut is the sum of the capacities of the edges that go from a vertex in A to a vertex in B.
+
+* *Flow of a cut:* The flow of the cut is the difference of the flows that go from A to B (the sum of the flows along the edges that have the starting point in A and the ending point in B), respectively from B to A, which is exactly the value of the flow in the network, due to the entering flow equals leaving flow – property, which is true for every vertex other than the source and the sink.
+
+## Visualisation of min-cut = max-flow
+The cut with partitions A (has source) and B (has sink) that has the minimum possible cut/maximum possible flow looks like this: Every edge that goes from A to B has flow equal to its capacity and every edge that goes from B to A has 0 flow. Note that there are no augmenting paths in the residual network of this flow. A is actually the set of reachable vertices from the source in the residual network of the flow.
+
+## Min-cut alternative statement
+Given a weighted directed graph, remove a minimum-weighted set of edges in such a way that a given node is unreachable from another given node. The result is, according to the max-flow min-cut theorem, the maximum flow in the graph, with capacities being the weights given.
+
+We are also able to find this set of edges in the way described above: we take every edge with the starting point marked as reachable in the last traversal of the graph and with an unmarked ending point. This edge is a member of the minimum cut.

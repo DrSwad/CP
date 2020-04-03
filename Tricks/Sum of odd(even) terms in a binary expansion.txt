@@ -1,0 +1,10 @@
+# Binary Expansion (a + b)^n
+= E (n choose k) * a ^ k * b ^ (n - k)
+
+# Sum of odd terms
+= for odd k, E (n choose k) * a ^ k * b ^ (n - k)
+= ((a + b) ^ n + (a - b) ^ n) / 2
+
+# Sum of even terms
+= for even k, E (n choose k) * a ^ k * b ^ (n - k)
+= ((a + b) ^ n - (a - b) ^ n) / 2
