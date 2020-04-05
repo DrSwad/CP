@@ -1,5 +1,9 @@
-1. 2 times - Calculation errors/typos due to lack of concentration.
+1. 2 times - Calculation error/typo due to lack of concentration.
 
-2. 1 time - accumulate(int*, int*, int) function overflow.
+2. 2 times - Mis-handling degenerate cases(0, 1, -1, ... etc)
 
-3. 1 time - The relation a^e (mod p) = a^(e (mod p-1)) (mod p) doesn't hold when a = 0 (mod p) and e = 0 (mod p - 1). Always avoid taking modulo of exponents. Write bigexp function for long long exponents instead.
+3. 1 time - Not thinking through carefully and realizing solution doesn't work or is incomplete while implementing.
+
+4. 1 time - accumulate(int*, int*, int) function overflow.
+
+5. 1 time - The relation a^e (mod p) = a^(e (mod p-1)) (mod p) doesn't hold when a = 0 (mod p) and e = 0 (mod p - 1). Always avoid taking modulo of exponents. Write bigexp function for long long exponents instead.
