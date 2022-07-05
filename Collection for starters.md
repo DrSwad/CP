@@ -1,0 +1,17 @@
+* http://sportprogramming.blogspot.com/2014/07/getting-started-with-sport-of.html
+* https://codeforces.com/blog/entry/66909
+* https://github.com/lnishan/awesome-competitive-programming
+* https://github.com/ShahjalalShohag/Competitive-Programming-A-Complete-Guideline
+* https://github.com/bqi343/USACO/blob/master/Resources/Questions.md
+* https://github.com/Errichto/youtube/wiki/How-to-practice%3F
+* https://www.youtube.com/c/Errichto
+* https://github.com/bqi343/USACO/blob/master/Resources/Solving%20Problems.md
+* https://codeforces.com/blog/entry/64993
+* https://codeforces.com/blog/entry/98621
+* https://codeforces.com/blog/entry/98806
+* https://codeforces.com/blog/entry/96383
+* https://codeforces.com/blog/entry/17842
+* https://codeforces.com/blog/entry/91114
+* https://codeforces.com/blog/entry/62730
+* https://codeforces.com/blog/entry/103077
+* https://codeforces.com/blog/entry/47516
