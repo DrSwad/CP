@@ -1,0 +1,1 @@
+1. Input section: N and Q are not given in the same line.

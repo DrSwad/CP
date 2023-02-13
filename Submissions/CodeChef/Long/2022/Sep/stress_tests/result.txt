@@ -1,0 +1,37 @@
+Test 1894 Passed
+
+Input 1894: 
+4
+cbbb
+7
+2 3
+7 7
+3 7
+7 7
+5 5
+6 8
+8 8
+
+
+Brute Force Output: 
+bb
+c
+bbbbc
+c
+b
+-1
+-1
+
+
+Obtained Output: 
+bb
+c
+bbbbc
+c
+b
+-1
+-1
+
+
+________________________________________________________
+

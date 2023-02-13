@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "memory_resource": "cpp",
+    "future": "cpp",
+    "shared_mutex": "cpp"
+  }
+}

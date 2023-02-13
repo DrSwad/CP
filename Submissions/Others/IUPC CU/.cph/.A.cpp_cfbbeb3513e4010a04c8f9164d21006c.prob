@@ -1,0 +1,1 @@
+{"name":"Local: A","url":"/Users/swad/Desktop/CP/cf/IUPC CU/A.cpp","tests":[{"id":1615975355467,"input":"ABCDE","output":"YES"},{"id":1615975361098,"input":"ABCDC","output":"NO"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/IUPC CU/A.cpp","group":"local","local":true}

@@ -1,0 +1,17 @@
+Test 289 Passed
+
+Input 289: 
+10
+14 17 18 1 13 12 1 16 5 19
+
+
+Brute Force Output: 
+Bob
+
+
+Obtained Output: 
+Bob
+
+
+________________________________________________________
+

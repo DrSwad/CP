@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"/Users/swad/Desktop/CP/cf/tpc 6/brute.cpp","tests":[{"id":1622549276619,"input":"5 1 1\nedcba","output":"abcde"},{"id":1622549287270,"input":"5 4 4\nedcba","output":"adcbe"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/tpc 6/brute.cpp","group":"local","local":true}

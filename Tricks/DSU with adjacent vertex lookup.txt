@@ -1,7 +1,0 @@
-# Problem
-
-Suppose a graph has N vertices and M edges. We'll add the edges and in between those addtion queries, for some pairs of vertices (A, B) we'll need to find out if A or any of it's adjacent vertices is conntected to B.
-
-# Solution
-
-While doing weighted-dsu, any vertex can change it's root atmost log(N) times. So, for every vertex, maintain the roots of it's adjacent vertices. There are in total O(2 * M * log(N)) adjacent roots over all vertices. To solve a query, just do binary search in adjacent roots of A for the root of B, which takes at most O(log(2 * M * log(N))) time.

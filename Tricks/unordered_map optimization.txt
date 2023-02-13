@@ -1,7 +1,0 @@
-It seems that sometimes unordered_map becomes so slow. But it can improve with these two lines of code:
-
-unordered_map<int, int> mp;
-mp.reserve(1024);
-mp.max_load_factor(0.25);
-
-With these two lines unordered_map becomes about 10 times faster. You can replace 1024 with another suitable power of two(it depends on number of insert s you will do).

@@ -1,0 +1,18 @@
+Test 666 Passed
+
+Input 666: 
+1
+1
+1
+
+
+Brute Force Output: 
+0
+
+
+Obtained Output: 
+0
+
+
+________________________________________________________
+

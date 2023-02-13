@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"/Users/swad/Desktop/CP/cf/Collab 5/brute.cpp","tests":[{"id":1617359181031,"input":"2\n2 1","output":"2"},{"id":1617359192140,"input":"3\n2 1 3","output":"15"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/Collab 5/brute.cpp","group":"local","local":true}

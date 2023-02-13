@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"/Users/swad/Desktop/CP/cf/tsc 14/brute.cpp","tests":[{"id":1617122671603,"input":"1\n2\n0 0\n0 2\n1 1\n1 1","output":"0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/tsc 14/brute.cpp","group":"local","local":true}

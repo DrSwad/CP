@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.tcc": "cpp",
+    "cmath": "cpp",
+    "functional": "cpp",
+    "random": "cpp",
+    "regex": "cpp",
+    "type_traits": "cpp"
+  }
+}

@@ -1,0 +1,21 @@
+/*
+
+!.gitignore
+
+!Coach/
+Coach/*
+!Coach/Collection for starters.md
+
+!Resources/
+Resources/*
+!Resources/Libraries/
+Resources/Libraries/*
+!Resources/Libraries/Personal Library/
+Resources/Libraries/Personal Library/*
+!Resources/Libraries/Personal Library/*.cpp
+
+!Setup/
+
+!Submissions/
+
+**/.DS_Store

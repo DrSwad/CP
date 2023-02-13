@@ -1,0 +1,1 @@
+{"name":"Local: Hidden Pancakes","url":"/Users/swad/Desktop/CP/cf/GCJ 2021/2/Hidden Pancakes.cpp","tests":[{"id":1621092874524,"input":"3\n4\n1 2 2 1\n3\n1 1 2\n3\n1 1 3","output":"Case #1: 1\nCase #2: 2\nCase #3: 0"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/GCJ 2021/2/Hidden Pancakes.cpp","group":"local","local":true}

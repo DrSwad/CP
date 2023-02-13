@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"/Users/swad/Desktop/CP/Submissions/CodeChef/Cook-Off/2021/Sept/brute.cpp","tests":[{"id":1632076255360,"input":"3\n5\n1 2 3 4 5\n4\n1 2 3 4\n3\n30 42 70","output":"NO\nYES\nNO"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/Submissions/CodeChef/Cook-Off/2021/Sept/brute.cpp","group":"local","local":true}

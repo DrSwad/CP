@@ -1,0 +1,389 @@
+% pygmentex.sty
+
+\NeedsTeXFormat{LaTeX2e}
+
+\ProvidesPackage{pygmentex}[2014/08/12 v0.8 A Pygmentex layer for LaTeX]
+
+\RequirePackage{fancyvrb}
+\RequirePackage{color}
+\RequirePackage{ifthen}
+%\RequirePackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\RequirePackage{caption}
+\RequirePackage{pgfkeys}
+\RequirePackage{efbox}
+\RequirePackage[framemethod=tikz]{mdframed}
+
+%\DeclareCaptionType[within=chapter]{code}[Listagem][Lista de listagens]
+\DeclareCaptionType{code}[Listagem][Lista de listagens]
+\captionsetup[code]{position=top}
+
+% =========================================================
+% Auxiliary:
+%   finding the widest string in a comma
+%   separated list of strings delimited by parenthesis
+% =========================================================
+
+% arguments:
+% #1) text: a comma separeted list of strings
+% #2) formatter: a macro to format each string
+% #3) dimension: will hold the result
+
+\def\widest(#1)#2#3{%
+  \begingroup
+  \def\widest@end{\widest@end}%
+  \def\widest@helper##1,{%
+    \ifx\widest@end##1\relax
+    \else
+      \settowidth\dimen@{#2{##1}}%
+      \ifdim#3<\dimen@
+        \global#3=\dimen@
+      \else
+      \fi
+      \expandafter\widest@helper
+    \fi
+  }%
+  \widest@helper#1,\widest@end,%
+  \endgroup
+}
+
+% =========================================================
+% fancyvrb new commands to append to a file
+% =========================================================
+
+% See http://tex.stackexchange.com/questions/47462/inputenc-error-with-unicode-chars-and-verbatim
+\long\def\unexpanded@write#1#2{\write#1{\unexpanded{#2}}}
+
+\def\VerbatimOutAppend{\FV@Environment{}{VerbatimOutAppend}}
+
+\def\FVB@VerbatimOutAppend#1{%
+  \@bsphack
+  \begingroup
+    \FV@UseKeyValues
+    \FV@DefineWhiteSpace
+    \def\FV@Space{\space}%
+    \FV@DefineTabOut
+    \def\FV@ProcessLine{\immediate\unexpanded@write#1}%
+    \let\FV@FontScanPrep\relax
+    \let\@noligs\relax
+    \FV@Scan
+}
+
+\def\FVE@VerbatimOutAppend{%
+  \endgroup
+  \@esphack
+}
+
+\DefineVerbatimEnvironment{VerbatimOutAppend}{VerbatimOutAppend}{}
+
+% =========================================================
+% Main options
+% =========================================================
+
+\newif\ifpygmented@opt@texcomments
+\newif\ifpygmented@opt@mathescape
+\newif\ifpygmented@opt@linenos
+\newif\ifpygmented@left
+\newif\ifpygmented@right
+
+% some settings used by fancyvrb:
+% * for line numbering:
+%     numbers, numbersep, firstnumber, stepnumber, numberblanklines
+% * for selection of lines to print:
+%     firstline, lastline,
+
+\pgfkeys{%
+  /pygmented/.cd,
+  % 
+  boxing method/.store in = \pygmented@opt@boxing@method,
+  inline method/.store in = \pygmented@opt@inline@method,
+  % 
+  lang/.store in          = \pygmented@opt@lang,
+  sty/.store in           = \pygmented@opt@style,
+  escapeinside/.store in  = \pygmented@opt@escapeinside,
+  texcomments/.is if      = pygmented@opt@texcomments,
+  mathescape/.is if       = pygmented@opt@mathescape,
+  % 
+  label/.store in         = \pygmented@opt@label,
+  caption/.store in       = \pygmented@opt@caption,
+  % 
+  gobble/.store in        = \pygmented@opt@gobble,
+  tabsize/.store in       = \pygmented@opt@tabsize,
+  % 
+  linenos/.is if          = pygmented@opt@linenos,
+  linenostart/.store in   = \pygmented@opt@linenostart,
+  linenostep/.store in    = \pygmented@opt@linenostep,
+  linenosep/.store in     = \pygmented@opt@linenosep,
+  %
+  colback/.store in       = \pygmented@opt@colback,
+  font/.store in          = \pygmented@opt@font,
+  % 
+  texcomments/.default    = true,
+  mathescape/.default     = true,
+  linenos/.default        = true,
+}
+
+\pgfqkeys{/pygmented}{
+  boxing method = mdframed,
+  inline method = efbox,
+  sty           = default,
+  linenos       = false,
+  linenosep     = 2pt,
+  font          = \ttfamily,
+  tabsize       = 0,
+}
+
+% =========================================================
+% pygmented commands and environments
+% =========================================================
+
+\newwrite\pygmented@outfile
+
+\newcount\pygmented@counter
+
+\newcommand\pygmented@process@options[1]{%
+  \pgfkeys{%
+    /pgf/key filters/defined/.install key filter,%
+    /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingglobaloptions
+  }%
+  \def\remainingglobaloptions{}%
+  \pgfkeysalsofilteredfrom{\pygmented@global@options}%
+  \pgfkeysalso{%
+    /pgf/key filter handlers/append filtered to/.install key filter handler=\remaininguseroptions
+  }%
+  \def\remaininguseroptions{}%
+  \pgfqkeysfiltered{/pygmented}{#1}%
+  % %%%%%%% DEBUGING
+  % \typeout{}%
+  % \typeout{\string\pygmented@global@options:}\typeout{\meaning\pygmented@global@options}%
+  % \typeout{\string\remainingglobaloptions:}\typeout{\meaning\remainingglobaloptions}%
+  % \typeout{\string\remaininguseroptions:}\typeout{\meaning\remaininguseroptions}%
+  % 
+  \fvset{gobble=0,tabsize=0}%
+}
+
+\newcommand\pygmented@process@adicional@options[1]{%
+  \pgfkeysalso{%
+    /pgf/key filters/false/.install key filter,%
+    /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingoptions
+  }%
+  \def\remainingoptions{}%
+  \pgfkeysalsofilteredfrom{\remainingglobaloptions}%
+  \edef\pygmented@saved@{%
+    \ifcsname pygmented@#1@additional@options\endcsname
+      \csname pygmented@#1@additional@options\endcsname,%
+    \fi
+  }%
+  \pgfkeysalsofilteredfrom{\pygmented@saved@}%
+  \pgfkeysalsofilteredfrom{\remaininguseroptions}%
+  % %%%%%%% DEBUGING
+  % \typeout{}%
+  % \typeout{\string\remainingoptions:}%
+  % \typeout{\meaning\remainingoptions}%
+}
+
+\newcommand\inputpygmented[2][]{%
+  \begingroup
+    \pygmented@process@options{#1}%
+    \immediate\write\pygmented@outfile{<@@pygmented@input@\the\pygmented@counter}%
+    \immediate\write\pygmented@outfile{\detokenize\expandafter{\pygmented@global@options},\detokenize{#1}}%
+    \immediate\write\pygmented@outfile{#2}%
+    \immediate\write\pygmented@outfile{>@@pygmented@input@\the\pygmented@counter}%
+    %
+    \csname pygmented@snippet@\the\pygmented@counter\endcsname
+    \global\advance\pygmented@counter by 1\relax
+  \endgroup
+}
+
+\newenvironment{pygmented}[1][]{%
+  \pygmented@process@options{#1}%
+  \immediate\write\pygmented@outfile{<@@pygmented@display@\the\pygmented@counter}%
+  \immediate\write\pygmented@outfile{\detokenize\expandafter{\pygmented@global@options},\detokenize{#1}}%
+  \VerbatimEnvironment
+  \begin{VerbatimOutAppend}{\pygmented@outfile}%
+}{%
+  \end{VerbatimOutAppend}%
+  \immediate\write\pygmented@outfile{>@@pygmented@display@\the\pygmented@counter}%
+  \csname pygmented@snippet@\the\pygmented@counter\endcsname
+  \global\advance\pygmented@counter by 1\relax
+}
+
+\newcommand\pyginline[2][]{%
+  \begingroup
+    \pygmented@process@options{#1}%
+    \immediate\write\pygmented@outfile{<@@pygmented@inline@\the\pygmented@counter}%
+    \immediate\write\pygmented@outfile{\detokenize\expandafter{\pygmented@global@options},\detokenize{#1}}%
+    \DefineShortVerb{#2}%
+    \SaveVerb
+      [aftersave={%
+       \UndefineShortVerb{#2}%
+       \immediate\write\pygmented@outfile{\FV@SV@pygmented@verb}%
+       \immediate\write\pygmented@outfile{>@@pygmented@inline@\the\pygmented@counter}%
+       %
+       \csname pygmented@snippet@\the\pygmented@counter\endcsname
+       \global\advance\pygmented@counter by 1\relax
+       \endgroup
+      }]%
+      {pygmented@verb}#2%
+}
+
+
+\newcommand\pygmented@snippet@inlined[1]{%
+  \begingroup
+  \csname PYstyle\pygmented@opt@style\endcsname
+  \pygmented@opt@font
+  \pygmented@process@adicional@options{\pygmented@opt@inline@method}%
+  \expandafter\expandafter\csname \pygmented@opt@inline@method \endcsname\expandafter[\remainingoptions]{#1}%
+  \endgroup
+}
+
+\newenvironment{pygmented@snippet@framed}{%
+  \begingroup
+  \pygmented@leftmargin\z@
+  \ifpygmented@opt@linenos
+    \expandafter\widest\pygmented@alllinenos{\FormatLineNumber}{\pygmented@leftmargin}%
+    \advance\pygmented@leftmargin\pygmented@opt@linenosep
+  \fi
+  %
+  \ifdefined\pygmented@opt@label
+    \def\pygmented@title{%
+      \captionof{code}{\label{\pygmented@opt@label}\pygmented@opt@caption}%
+      % \nopagebreak
+      \vskip -0.7\baselineskip
+    }%
+  \else
+    \ifdefined\pygmented@opt@caption
+      \def\pygmented@title{%
+        \captionof{code}{\pygmented@opt@caption}%
+        % \nopagebreak
+        \vskip -0.7\baselineskip
+      }%
+    \fi
+  \fi
+  \ifdefined\pygmented@title
+    % \nopagebreak[0]%
+    \pygmented@title
+    % \nopagebreak
+  \fi
+  %
+  \pygmented@process@adicional@options{\pygmented@opt@boxing@method}%
+  \expandafter\begin\expandafter{\expandafter\pygmented@opt@boxing@method\expandafter}\expandafter[%
+    \remainingoptions
+    ]%
+  \csname PYstyle\pygmented@opt@style\endcsname
+  \pygmented@opt@font
+  % 
+  \noindent
+  }{%
+  \end{\pygmented@opt@boxing@method}%
+  \endgroup
+}
+
+
+\newcommand\pygmented@inlined[1]{%
+  \expandafter\efbox\expandafter[\remainingoptions]{#1}%
+}
+
+
+
+\def\FormatLineNumber#1{{\rmfamily\tiny#1}}
+
+
+\newdimen\pygmented@leftmargin
+\newdimen\pygmented@linenosep
+
+\def\pygmented@lineno@do#1{%
+  \pygmented@linenosep 0pt%
+  \csname pygmented@\pygmented@opt@boxing@method @margin\endcsname
+  \advance \pygmented@linenosep \pygmented@opt@linenosep
+  \makebox[0pt][r]{%
+    \FormatLineNumber{#1}%
+    \hspace*{\pygmented@linenosep}}%
+}
+
+\newcommand\pygmented@tcbox@additional@options{%
+  nobeforeafter,%
+  tcbox raise base,%
+  left=0mm,%
+  right=0mm,%
+  top=0mm,%
+  bottom=0mm,%
+  boxsep=2pt,%
+  arc=1pt,%
+  boxrule=0pt,%
+  \ifcsname pygmented@opt@colback\endcsname
+    colback=\pygmented@opt@colback,%
+  \fi
+}
+
+\newcommand\pygmented@efbox@additional@options{%
+  \ifcsname pygmented@opt@colback\endcsname
+    backgroundcolor=\pygmented@opt@colback,%
+  \fi
+}
+
+\newcommand\pygmented@mdframed@additional@options{%
+  leftmargin=\pygmented@leftmargin,%
+  frametitlerule=true,%
+  \ifcsname pygmented@opt@colback\endcsname
+    backgroundcolor=\pygmented@opt@colback,%
+  \fi
+}
+
+\newcommand\pygmented@tcolorbox@additional@options{%
+  grow to left by=-\pygmented@leftmargin,%
+  \ifcsname pygmented@opt@colback\endcsname
+    colback=\pygmented@opt@colback,%
+  \fi
+}
+
+\newcommand\pygmented@boite@additional@options{%
+  leftmargin=\pygmented@leftmargin,%
+  \ifcsname pygmented@opt@colback\endcsname
+    colback=\pygmented@opt@colback,%
+  \fi
+}
+
+
+\newcommand\pygmented@mdframed@margin{%
+  \advance \pygmented@linenosep \mdflength{outerlinewidth}%
+  \advance \pygmented@linenosep \mdflength{middlelinewidth}%
+  \advance \pygmented@linenosep \mdflength{innerlinewidth}%
+  \advance \pygmented@linenosep \mdflength{innerleftmargin}%
+}
+
+\newcommand\pygmented@tcolorbox@margin{%
+  \advance \pygmented@linenosep \kvtcb@left@rule
+  \advance \pygmented@linenosep \kvtcb@leftupper
+  \advance \pygmented@linenosep \kvtcb@boxsep
+}
+
+\newcommand\pygmented@boite@margin{%
+  \advance \pygmented@linenosep \boite@leftrule
+  \advance \pygmented@linenosep \boite@boxsep
+}
+
+\def\pygmented@global@options{}
+
+\newcommand\setpygmented[1]{%
+  \def\pygmented@global@options{/pygmented/.cd,#1}%
+}
+
+
+% =========================================================
+% final actions
+% =========================================================
+
+\AtEndOfPackage{%
+  \IfFileExists{\jobname.pygmented}{%
+    \input{\jobname.pygmented}%
+  }{%
+    \PackageWarning{pygmentex}{File `\jobname.pygmented' not found.}%
+  }%
+  \immediate\openout\pygmented@outfile\jobname.snippets%
+}
+
+\AtEndDocument{%
+  \closeout\pygmented@outfile%
+}
+
+\endinput

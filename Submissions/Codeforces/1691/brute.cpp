@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+struct DSU {
+  int n, sz;
+  vector<int> p; // root: -1 * component size, otherwise: parent
+  DSU(int n) : n(n), sz(n), p(n, -1) {}
+  bool same(int a, int b) { return root(a) == root(b); }
+  int root(int a) { return p[a] < 0 ? a : (p[a] = root(p[a])); }
+  int size(int a) { return -p[root(a)]; }
+  int size() { return sz; }
+  bool merge(int a, int b) {
+    int x = root(a), y = root(b);
+    if (x == y) return false;
+    sz--;
+    if (-p[x] < -p[y]) swap(x, y);
+    p[x] += p[y];
+    p[y] = x;
+    return true;
+  }
+  vector<vector<int>> groups() {
+    vector<int> _root(n), sz(n);
+    for (int i = 0; i < n; i++) _root[i] = root(i), sz[_root[i]]++;
+    vector<vector<int>> g(n);
+    for (int i = 0; i < n; i++) g[i].reserve(sz[i]);
+    for (int i = 0; i < n; i++) g[_root[i]].push_back(i);
+    auto empty = [&](const vector<int>&v) { return v.empty(); };
+    g.erase(remove_if(g.begin(), g.end(), empty), g.end());
+    return g;
+  }
+};
+
+void test_case() {
+  int n;
+  cin >> n;
+
+  vector<int> c(n), l(n), r(n);
+  for (int i = 0; i < n; i++) {
+    cin >> c[i] >> l[i] >> r[i];
+  }
+
+  DSU dsu(n);
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (c[j] != c[i] and l[j] <= r[i] and r[j] >= l[i]) {
+        dsu.merge(i, j);
+      }
+    }
+  }
+
+  cout << dsu.size() << "\n";
+}
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+
+  int t = 1;
+  cin >> t;
+
+  for (int cs = 1; cs <= t; cs++) {
+    // cout << "Case " << cs << ": ";
+    test_case();
+  }
+
+  return 0;
+}

@@ -1,0 +1,1 @@
+{"name":"Local: J","url":"/Users/swad/Desktop/CP/cf/Collab 5/J.cpp","tests":[{"id":1617357568825,"input":"2\n2 1","output":"2"},{"id":1617357577521,"input":"3\n2 1 3","output":"15"},{"id":1617359625815,"input":"5\n2 3 5 4 1","output":"455"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/Collab 5/J.cpp","group":"local","local":true}

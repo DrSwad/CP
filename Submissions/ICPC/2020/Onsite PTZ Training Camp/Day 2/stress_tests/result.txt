@@ -1,0 +1,16 @@
+Test 774 Passed
+
+Input 774: 
+1 406
+
+
+Brute Force Output: 
+-1
+
+
+Obtained Output: 
+-1
+
+
+________________________________________________________
+

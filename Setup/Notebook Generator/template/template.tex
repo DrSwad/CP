@@ -1,0 +1,90 @@
+\documentclass[10pt, landscape, a4paper,twosided]{extarticle}
+
+\usepackage{minted}
+%\usemintedstyle{bw}
+\usepackage{fouriernc}
+\usepackage[T1]{fontenc}
+\usepackage{framed}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[scaled=.85]{DejaVu Sans Mono}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{listings}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multicol}
+\usepackage{geometry}
+\usepackage{amssymb,tikz,psfrag,epstopdf}
+\geometry{verbose,landscape,a4paper,tmargin=1.25cm,bmargin=0cm,lmargin=0.75cm,rmargin=.25cm}
+
+\setlength{\parindent}{0pt}
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{$#2$}}%
+
+\setlength{\columnsep}{1.5mm}
+\setlength{\columnseprule}{1px}
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+\BeforeBeginEnvironment{minted}{\vspace{1mm}}
+\AfterEndEnvironment{minted}{\vspace{1mm}}
+
+\newmintedfile[cpp]{C++}{
+	 frame=lines,    
+    fontfamily=tt,
+    linenos=false,
+    numberblanklines=true,
+    numbersep=2pt,
+    gobble=0,
+    framerule=1pt,
+    framesep=1mm,
+    funcnamehighlighting=true,
+    tabsize=1,
+    obeytabs=false,
+    mathescape=false
+    samepage=false, %with this setting you can force the list to appear on the same page
+    showspaces=false,
+    showtabs =false,
+    texcl=false,
+    breaklines = true,
+    breakanywhere = true,
+}
+
+\linespread{0.50}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+\renewcommand{\theFancyVerbLine}{\sffamily \textcolor[rgb]{0.15,0.15,0.15}{\small \arabic{FancyVerbLine}}}
+\rfoot{\thepage}
+\lhead{\textcolor{MidnightBlue}{\textit{\textbf{University of Dhaka}}}}
+\setlength\headheight{16pt} 
+\rhead{\textcolor{MidnightBlue}{\textit{\textbf{DU\_FlareBlitz\_4.0}}}}
+\chead{\textcolor{Plum}{\textbf{Fiction}} | \textcolor{blue}{\textbf{\_timelord}} | \textcolor{Orange}{\textbf{DrSwad}}}
+\headsep = 0pt
+\textheight = 7.75in
+\footskip = 16pt
+
+\titlespacing{\section}{0pt}{2mm}{2mm}
+\titlespacing{\subsection}{0pt}{2mm}{2mm}
+\titlespacing{\subsubsection}{0pt}{2mm}{2mm}
+
+\titleformat{\section}
+  {\normalfont\fontsize{10}{15}\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontsize{8}{15}\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontsize{8}{15}\bfseries}{\thesubsubsection}{1em}{}
+
+\begin{document}
+\begin{multicols}{2}
+\tableofcontents
+\end{multicols}
+\newpage
+\begin{multicols}{3}
+%\noindent\makebox[\linewidth]{\rule{\paperwidth}{0.4pt}}

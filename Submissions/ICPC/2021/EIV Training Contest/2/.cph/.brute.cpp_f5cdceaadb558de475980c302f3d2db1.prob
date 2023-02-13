@@ -1,0 +1,1 @@
+{"name":"Local: brute","url":"/Users/swad/Desktop/CP/Submissions/ICPC/2022/EIV Training Contest/2/brute.cpp","tests":[{"id":1658243034070,"input":"1\nabac\naacabc","output":"811073537"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/Submissions/ICPC/2022/EIV Training Contest/2/brute.cpp","group":"local","local":true}
