@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 template<typename T, typename QT, class C = function<bool(const T&, const T&)>, class F = function<QT(const vector<T>&, const T&)>, class M = function<QT(const QT&, const QT&)>>
 class MergeSortTree {
   int n;
@@ -65,42 +62,19 @@ public:
     return query(1, 1, n, l, r, val);
   }
 };
-
-int main() {
-  int t;
-  cin >> t;
-
-  while (t--) {
-    int n, q;
-    cin >> n >> q;
-
-    vector<int> a(n);
-    for (int &i : a) cin >> i;
-
-    vector<int> indices(n);
-    iota(indices.begin(), indices.end(), 1);
-
-    // st.query(l, r, v) returns left-most index in vector a that is equal to v
-    MergeSortTree<int, int> st(
-      indices,
-      -1,
-      [&](const vector<int> &v, int val) {
-      auto it = lower_bound(v.begin(), v.end(), val, [&](int i, int val) {
-        return a[i - 1] < val;
-      });
-      if (it == v.end() or a[*it - 1] != val) return -1;
-      return *it;
-    },
-      [&](int qL, int qR) { return qL == -1 ? qR : qL; },
-      [&](int i, int j) { return a[i - 1] != a[j - 1] ? a[i - 1] < a[j - 1] : i < j; }
-      );
-
-    while (q--) {
-      int l, r, v;
-      cin >> l >> r >> v;
-      cout << st.query(l, r, v) << endl;
-    }
-  }
-
-  return 0;
-}
+/*
+// st.query(l, r, v) returns left-most index in vector a that is equal to v
+MergeSortTree<int, int> st(
+  indices,
+  -1,
+  [&](const vector<int> &v, int val) {
+    auto it = lower_bound(v.begin(), v.end(), val, [&](int i, int val) {
+      return a[i - 1] < val;
+    });
+    if (it == v.end() or a[*it - 1] != val) return -1;
+    return *it;
+  },
+  [&](int qL, int qR) { return qL == -1 ? qR : qL; },
+  [&](int i, int j) { return a[i - 1] != a[j - 1] ? a[i - 1] < a[j - 1] : i < j; }
+);
+*/
