@@ -1,35 +1,30 @@
-struct FenwickTree {
-  int n, lg;
-  vector<int> f, one;
-
-  FenwickTree(int n = 0) : n(n) {
-    f.resize(n + 1, 0), one.resize(n + 1, 0), lg = 0;
-    while (2 << lg <= n) ++lg;
+template<class T>
+class BIT {
+public:
+  int n;
+  vector<T> f;
+  BIT(int n) : n(n) {
+    f.resize(n + 1, (T)0);
   }
-
-  void update(int p, int v) {
-    one[p] ^= 1;
+  BIT(const vector<T> &a) { // O(n)
+    n = a.size();
+    f.assign(n + 1, (T)0);
+    for (int i = 1; i <= n; i++) {
+      f[i] += a[i - 1];
+      if (i + (i & -i) <= n) {
+        f[i + (i & -i)] += f[i];
+      }
+    }
+  }
+  void update(int p, T v) {
     while (p <= n) f[p] += v, p += p & -p;
   }
-
-  int pref(int p) {
-    int ret = 0;
+  T pref(int p) {
+    T ret = 0;
     while (p) ret += f[p], p -= p & -p;
     return ret;
   }
-
-  inline int range(int l, int r) {
+  T range(int l, int r) {
     return pref(r) - pref(l - 1);
-  }
-
-  int kthOne(int k) {
-    assert(k > 0);
-    for (int i = 0, j = lg; j >= 0; --j) {
-      int cur = i | 1 << j;
-      if (cur > n) continue;
-      if (f[cur] == k and one[cur]) return cur;
-      if (f[cur] < k) i = cur, k -= f[cur];
-    }
-    return -1;
   }
 };
