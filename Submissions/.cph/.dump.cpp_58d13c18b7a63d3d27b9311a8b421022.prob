@@ -1,1 +1,0 @@
-{"name":"Local: dump","url":"/Users/swad/Desktop/CP/cf/dump.cpp","tests":[{"id":1616435946427,"input":"1\n5\n1 3 4 5 2\n3\n1 1 3 3\n1 2 4 5\n2 1 5","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/swad/Desktop/CP/cf/dump.cpp","group":"local","local":true}
