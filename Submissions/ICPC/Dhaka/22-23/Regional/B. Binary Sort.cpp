@@ -2,7 +2,7 @@
 using namespace std;
 
 const int BITS = 60;
-const int INF = 1e9;
+const int MAX_OP = 3e3;
 typedef long long ll;
 
 void test_case() {
@@ -12,45 +12,41 @@ void test_case() {
   vector<ll> a(n);
   for (ll &i : a) cin >> i;
 
-  vector pref(BITS, vector(n + 1, 0));
-  for (int bit = 0; bit < BITS; bit++) {
-    for (int i = 0; i < n; i++) {
-      pref[bit][i + 1] = pref[bit][i] + (a[i] >> bit & 1);
-    }
-  }
+  vector dp(2, vector(MAX_OP + 1, -1ll));
+  dp[1][0] = 0;
 
-  vector dp(2, vector(n, vector(n, 0)));
-  vector opt(2, vector(n, vector(n, -1)));
+  auto consider = [&](ll &dp, ll val) { dp = dp == -1 ? val : min(dp, val); };
 
-  for (int bit = 0; bit < BITS; bit++) {
-    int b = bit & 1;
+  for (int i = 0; i < n; i++) {
+    int ii = i & 1;
+    fill(dp[ii].begin(), dp[ii].end(), -1ll);
 
-    for (int i = 0; i < n; i++) {
-      dp[b][i][i] = 0;
-      if (a[i] >> bit & 1) opt[b][i][i] = i;
-      else opt[b][i][i] = i - 1;
-    }
+    for (int prv_op = 0; prv_op <= MAX_OP; prv_op++) {
+      if (dp[ii ^ 1][prv_op] == -1) continue;
 
-    for (int i = n - 1; i >= 0; i--) {
-      for (int j = i + 1; j < n; j++) {
-        dp[b][i][j] = INF;
+      ll prv_a = dp[ii ^ 1][prv_op];
+      if (prv_a < a[i]) consider(dp[ii][prv_op], a[i]);
 
-        for (int k = max(i - 1, opt[b][i][j - 1]); k <= min(j, opt[b][i + 1][j]); k++) {
-          int b1 = b ^ 1;
-          if ((k >= i and dp[b1][i][k] == -1) or (k < j and dp[b1][k + 1][j] == -1)) continue;
-          if (pref[bit][k + 1] - pref[bit][i] > 0) continue;
-          int cost = (j - k) - (pref[bit][j + 1] - pref[bit][k + 1]);
-          int cur = (k >= i ? dp[b1][i][k] : 0) + (k < j ? dp[b1][k + 1][j] : 0) + cost;
-          if (cur < dp[b][i][j]) {
-            dp[b][i][j] = cur;
-            opt[b][i][j] = k;
-          }
+      int carry_op = 0;
+      ll carry_a = a[i];
+      for (int b = BITS - 1; b >= 0; b--) {
+        if (!(a[i] >> b & 1) and !(prv_a >> b & 1)) {
+          consider(dp[ii][prv_op + carry_op + 1], carry_a + (1ll << b));
+        }
+        if (!(a[i] >> b & 1) and (prv_a >> b & 1)) {
+          carry_op++;
+          carry_a += 1ll << b;
         }
       }
     }
   }
 
-  cout << dp[(BITS - 1) & 1][0][n - 1] << "\n";
+  int ans;
+  for (ans = 0; ans <= MAX_OP; ans++) {
+    if (dp[(n - 1) & 1][ans] >= 0) break;
+  }
+
+  cout << ans << "\n";
 }
 
 int main() {
