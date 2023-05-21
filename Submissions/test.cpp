@@ -2,12 +2,15 @@
 using namespace std;
 
 int main() {
-  queue<int> q({1, 2, 3});
-  stack<int> s({1, 2, 3});
-  deque<int> d({1, 2, 3});
-  debug(q.size());
-  debug(s.size());
-  debug(d.size());
+  int n;
+  cin >> n;
+
+  vector<int> a(n);
+  for (int &i : a) cin >> i;
+
+  auto ans = lower_bound(a.begin(), a.end(), 1);
+  if (ans == a.end()) cout << "-1\n";
+  else cout << ans - a.begin() << "\n";
 
   return 0;
 }
