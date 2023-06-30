@@ -2,15 +2,20 @@
 using namespace std;
 
 int main() {
-  int n;
-  cin >> n;
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
 
-  vector<int> a(n);
-  for (int &i : a) cin >> i;
+  vector<string> names{"Bessie", "Buttercup", "Belinda", "Beatrice", "Bella", "Blue", "Betsy", "Sue"};
+  map<string, int> name_id;
+  for (int i = 0; i < names.size(); i++) {
+    name_id[names[i]] = i;
+  }
 
-  auto ans = lower_bound(a.begin(), a.end(), 1);
-  if (ans == a.end()) cout << "-1\n";
-  else cout << ans - a.begin() << "\n";
+  char name1[20], name2[20];
+  scanf("%s must be milked beside %s", name1, name2);
+  string str1(name1), str2(name2);
+  int id1 = name_id[str1], id2 = name_id[str2];
+  cout << id1 << " " << id2 << endl;
 
   return 0;
 }
