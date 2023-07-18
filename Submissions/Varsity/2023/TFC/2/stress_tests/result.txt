@@ -1,0 +1,17 @@
+Test 255 Passed
+
+Input 255: 
+3
+2 3 0
+
+
+Brute Force Output: 
+3
+
+
+Obtained Output: 
+3
+
+
+________________________________________________________
+
