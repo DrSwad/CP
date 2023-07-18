@@ -1,0 +1,1 @@
+Given a prime number p, the task is to print the square roots of all the integers from 0 to p-1, modulo p.

@@ -1,0 +1,5 @@
+The given problem can be solved using the concepts of Modular Arithmetic.
+
+The square root of any integer modulo p must be an integer between 0 and p-1. So we can consider each integer from 0 to p-1 as the square root, and set it as the answer of it's square. Since the values that don't have any square roots should have an answer of -1, we need to initialize all the answers as -1 at the beginning.
+
+Since we're considering every integer from 0 to p-1 once, the time and memory complexity of the solution is O(p).
