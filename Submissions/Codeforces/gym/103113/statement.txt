@@ -1,0 +1,15 @@
+In this problem, we will consider two types of connections of resistors: series and parallel.
+
+When N resistors with resistances R_1, R_2, ..., R_N are connected in series, the total resistance of the resulting circuit will be equal to: R = R_1 + R_2 + ... + R_N.
+
+When they are connected in parallel, the total circuit resistance will be equal to: R = 1/{(1)/(R_1) + (1)/(R_2) + ... + (1)/(R_N)}.
+
+You can construct and use at most 128 circuits (c_0, c_1, ..., c_127) to answer some queries later on. The first circuit c_0 is already initialized as an elementary circuit consisting of only one resistor with resistance 1. All the other circuits (c_1, ..., c_127) are initially empty. You can initialize any of these circuits, c_i, by connecting the previous circuits (from c_0 to c_{i-1}) using serial and parallel connections (you could use some of the previous circuits multiple times, and even not use some of them at all).
+
+After you have constructed the necessary number of circuits you need (at most 128), you will receive queries. The input parameter of each query is the required total resistance value R = x/y. In response to the query, you must design an electrical circuit whose total resistance is exactly R. You can use series and parallel connections of circuits you have constructed initially to design a circuit that answers the query. Moreover, the number of circuits used to answer a query should not exceed 90.
+
+---
+
+You have a computer with 128 registers, each of which can store exactly one electrical circuit consisting only of resistors. The registers are numbered from 0 to 127. Initially, an elementary circuit is written in register number 0: one resistor with resistance R_0 = 1. All other registers are initially empty.
+
+Before answering any queries, you can fill in some of these empty registers (with numbers from 1 to 127) with valid electrical circuits. An electrical circuit is valid for writing to register number i if: for the design of this circuit, only the operations of serial and parallel connections of previous circuits (with numbers from 0 to i-1) are used. Some of them could possibly be used multiple times, and some possibly none.

@@ -11,14 +11,12 @@ void init() {
   p[0] = "R0";
   for (int i = 1; i < EXP; i++) {
     p[i] = "R" + to_string(i);
-    // UNCOMMENT
-    // cout << "S(" << p[i - 1] << ", " << p[i - 1] << ")" << endl;
+    cout << "S(" << p[i - 1] << ", " << p[i - 1] << ")" << endl;
   }
   inv_p[0] = "R0";
   for (int i = 1; i < EXP; i++) {
     inv_p[i] = "R" + to_string(EXP + i - 1);
-    // UNCOMMENT
-    // cout << "P(" << inv_p[i - 1] << ", " << inv_p[i - 1] << ")" << endl;
+    cout << "P(" << inv_p[i - 1] << ", " << inv_p[i - 1] << ")" << endl;
   }
 }
 
@@ -101,6 +99,14 @@ int main() {
     cin >> up >> down;
     serial(up, down);
     cout << endl;
+  }
+
+  ll x = 0, y = 1;
+  while (y <= 1e18) {
+    debug(x, y);
+    ll prv_y = y;
+    y = 2 * y + x;
+    x = prv_y;
   }
 
   return 0;

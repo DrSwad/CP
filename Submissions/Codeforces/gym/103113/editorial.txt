@@ -1,0 +1,29 @@
+We initialize the registers R_0 to R_{59} with circuits of resistance 2^0, 2^2, ..., 2^{59} and the registers R_{60} to R_{119} with circuits of resistance 1/(2^0), 1/(2^2), ..., 1/(2^{59})
+
+Let the required total resistance be R=x/y. We consider two cases:
+
+- Case 1 (If x >= y)
+  Then, let q be the quotient upon dividing x by y, and let r be the remainder.
+  Also, let the binary representation of q be: q = 2^{e_1} + ... + 2^{e_k}.
+  Then, R = x/y
+          = q + r/y
+          = (2^{e_1} + ... + 2^{e_k}) + r/y
+          = R_{e_1} + ... + R_{e_k} + r/y
+  If r = 0, then we just connect R_{e_1} + ... + R_{e_k} in series circuit to achieve a total resistance of x/y.
+  But it r != 0, then we need to find a circuit with resistance r/y, then we can connect it with R_{e_1}, ..., R_{e_k} in a series circuit to obtain a total resistance of x/y.
+  But notice that, r < y. So, we can use Case 2 to recursively find a circuit with resistance r/y.
+
+- Case 2 (If x < y)
+  We would form a parallel circuit to solve this case. Let, R_i and R_j be the resistance of two circuits that produces a total resistance of x/y when connected in parallel.
+  Then, x/y = 1/(1/R_i + 1/R_j)
+     => y/x = 1/R_i + 1/R_j
+  Since, x < y, let q be the quotient upon dividing y by x, and let r be the remainder.
+  Also, let the binary representation of q be: q = 2^{e_1} + ... + 2^{e_k}.
+  Then, y/x = q + r/x
+            = (2^{e_1} + ... + 2^{e_k}) + r/x
+            = (1/(1/2^{e_1}) + ... + 1/(1/2^{e_k})) + r/x
+            = 1/R_{60+e_1} + ... + 1/R_{60+e_k} + r/x
+  So, we can let R_i be P(R_{60+e_1}, P(R_{60+e_2}, P(..., R{60+e_k}))).
+  Finally, we just need to find a circuit with resistance R_j=r/x. If we r = 0, we don't even need another circuit for this. But otherwise notice that, r < x. So, we can again use Case 2 recursively to find a circuit with resistance r/x.
+
+The algorithm works similar to the Euclidean Algorithm for finding GCD, and thus the recursion has a depth of around O(log(max(x, y))). Also, notice that since the product of all the different values of q at each depth of the recursion cannot exceed 10^{18}, they collectively could have at most around 80-90 bits in their binary representations, intuitively. And thus, we don't exceed the maximum number of resistors allowed.
