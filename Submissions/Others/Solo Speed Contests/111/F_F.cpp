@@ -8,36 +8,31 @@ int main() {
   int n;
   cin >> n;
 
-  const int len = 8;
   vector<string> a(n);
   for (auto &s : a) cin >> s;
-  a.insert(a.begin(), string(len, '0'));
+  a.insert(a.begin(), "");
 
   vector<int> init_len(n + 1);
-  init_len[0] = 0;
-  for (int i = 1; i <= n; i++) {
+  for (int i = 0; i <= n; i++) {
     init_len[i] = a[i].length();
-  }
-
-  for (auto &s : a) {
-    if (s.length() < len) {
-      s = string(len - s.length(), '0') + s;
-    }
   }
 
   auto greater_possible =
     [&](int i, int j) {
-      if (j + 1 >= len) return false;
-      string prv = a[i - 1].substr(j + 1);
-      string cur = a[i].substr(j + 1);
+      assert(a[i].length() == a[i - 1].length());
+      int len = a[i].length();
+      if (j >= len) return false;
+      string prv = a[i - 1].substr(j);
+      string cur = a[i].substr(j);
+      for (char &c : cur) if (c == '?') c = '9';
       return cur > prv;
     };
 
-  auto fill_rest =
-    [&](int i, int j) {
-      for (int k = j; k < len; k++) {
-        if (a[i][k] == '?') {
-          a[i][k] = '0';
+  auto fill_zero =
+    [&](int i) {
+      for (char &c : a[i]) {
+        if (c == '?') {
+          c = '0';
         }
       }
     };
@@ -54,75 +49,41 @@ int main() {
   }
 
   for (int i = 1; i <= n; i++) {
-    if (init_len[i] > init_len[i - 1]) {}
-
-    for (int j = 0; j < len; j++) {
-      if (a[i][j] != '?') {
-        if (a[i][j] < a[i - 1][j]) no();
-        else if (a[i][j] > a[i - 1][j]) {
-          fill_rest(i, j);
-          break;
+    if (init_len[i] > init_len[i - 1]) {
+      if (a[i][0] == '?') a[i][0] = '1';
+      fill_zero(i);
+    }
+    else {
+      int len = a[i].length();
+      for (int j = 0; j < len; j++) {
+        if (a[i][j] != '?') {
+          if (a[i][j] < a[i - 1][j]) no();
+          else if (a[i][j] > a[i - 1][j]) {
+            fill_zero(i);
+            break;
+          }
+          else if (!greater_possible(i, j + 1)) no();
         }
-      }
-      else {
-        if (greater_possible(i, j)) {
-          a[i][j] = a[i - 1][j];
-          if (a[i - 1][j] == '0' and j >= nonzero[i]) {
-            bool found = false;
-            for (int k = 0; k <= nonzero[i]; k++) {
-              if (a[i][k] != '0') {
-                found = true;
-                break;
-              }
-            }
-
-            if (!found) {
-              a[i][j] = '1';
-              for (int k = j + 1; k < len; k++) {
-                if (a[i][k] == '?') a[i][k] = '0';
-              }
+        else {
+          if (greater_possible(i, j + 1)) {
+            a[i][j] = a[i - 1][j];
+          }
+          else {
+            if (a[i - 1][j] == '9') no();
+            else {
+              a[i][j] = a[i - 1][j] + 1;
+              fill_zero(i);
               break;
             }
           }
         }
-        else {
-          if (a[i - 1][j] == '9') no();
-          else {
-            a[i][j] = a[i - 1][j] + 1;
-            fill_rest(i, j);
-            break;
-          }
-        }
       }
-    }
-    if (a[i] <= a[i - 1]) no();
-  }
-
-  for (int i = 1; i <= n; i++) {
-    bool found = false;
-    for (int j = 0; j <= nonzero[i]; j++) {
-      if (a[i][j] != '0') {
-        found = true;
-        break;
-      }
-    }
-    if (!found) {
-      cout << "NO\n";
-      return;
     }
   }
 
   cout << "YES\n";
   for (int i = 1; i <= n; i++) {
-    bool flag = false;
-    for (int j = 0; j < len; j++) {
-      if (a[i][j] != '0') {
-        flag = true;
-        cout << a[i][j];
-      }
-      else if (flag) cout << a[i][j];
-    }
-    cout << "\n";
+    cout << a[i] << "\n";
   }
 
   return 0;
