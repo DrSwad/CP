@@ -1,3 +1,6 @@
+#ifndef DEBUG_INCLUDED
+#define DEBUG_INCLUDED
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -27,10 +30,10 @@ string to_string(bool b) {
 }
 
 /*
-string to_string(__cxx1998::_Bit_reference b) { // without this vector<bool> fails
-  return (b ? "true" : "false");
-}
-*/
+   string to_string(__cxx1998::_Bit_reference b) { // without this vector<bool> fails
+   return (b ? "true" : "false");
+   }
+ */
 
 string to_string(vector<bool> v) {
   bool first = true;
@@ -103,3 +106,5 @@ struct debug_block {
   ~debug_block() { --__db_level; clog << "}" << endl; }
 };
 #define debug(...) clog << "[" <<#__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+
+#endif
