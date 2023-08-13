@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+typedef long long ll;
+
 int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -11,33 +13,21 @@ int main() {
   vector<int> a(n);
   for (int &i : a) cin >> i;
 
-  vector<vector<int>> v(k);
-  for (int i = 0; i < n; i++) {
-    v[i % k].push_back(a[i]);
+  vector<ll> all_pref(n + 1);
+  vector<ll> positive_pref(n + 1);
+
+  all_pref[0] = positive_pref[0] = 0;
+  for (int i = 1; i <= n; i++) {
+    all_pref[i] = all_pref[i - 1] + a[i - 1];
+    positive_pref[i] = positive_pref[i - 1] + max(0, a[i - 1]);
   }
 
-  vector<long long> ans(2, 0);
-  for (int i = 0; i < k; i++) {
-    sort(v[i].begin(), v[i].end(), greater<int>());
-    vector<long long> mx(2, 0);
-
-    mx[0] = 0;
-    for (int j = 0; j + 1 < v[i].size(); j += 2) {
-      if (v[i][j] + v[i][j + 1] < 0) break;
-      mx[0] += v[i][j] + v[i][j + 1];
-    }
-
-    mx[1] = v[i][0];
-    for (int j = 1; j + 1 < v[i].size(); j += 2) {
-      if (v[i][j] + v[i][j + 1] < 0) break;
-      mx[1] += v[i][j] + v[i][j + 1];
-    }
-
-    ans[0] += mx[0];
-    ans[1] += mx[1];
+  ll ans = 0;
+  for (int i = 1; i + k - 1 <= n; i++) {
+    ans = max(ans, positive_pref[i - 1] + max(0ll, all_pref[i + k - 1] - all_pref[i - 1]) + positive_pref[n] - positive_pref[i + k - 1]);
   }
 
-  cout << max(ans[0], ans[1]) << "\n";
+  cout << ans << "\n";
 
   return 0;
 }

@@ -1,18 +1,18 @@
-Test 1890 Passed
+Test 10000 Passed
 
-Input 1890: 
+Input 10000: 
 1
-2 2
-5 3
--2 0
+1 1
+5
+4
 
 
 Brute Force Output: 
-20
+2
 
 
 Obtained Output: 
-20
+2
 
 
 ________________________________________________________
