@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.ejs": "javascript",
+    "array": "cpp"
+  }
+}

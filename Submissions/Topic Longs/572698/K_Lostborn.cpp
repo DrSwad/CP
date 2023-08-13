@@ -3,25 +3,12 @@ using namespace std;
 
 typedef long long ll;
 const int K = 100;
-const int N = 7e6;
+const int N = 1e7;
 
 ll n;
 int k;
 int a[K];
-ll divs[N], dp[N], dp2[N];
-ll ans;
-
-void go(int at, bool parity, ll mul) {
-  if (at >= k or mul * a[at] > n) {
-    ll contrib = (mul >= N ? dp[n / mul] : dp2[mul]) - n / mul;
-    if (parity) ans += contrib;
-    else ans -= contrib;
-    return;
-  }
-
-  go(at + 1, !parity, mul * a[at]);
-  go(at + 1, parity, mul);
-}
+ll divs[N], dp[N];
 
 int main() {
   ios::sync_with_stdio(false);
@@ -31,7 +18,7 @@ int main() {
   for (int i = 0; i < k; i++) {
     cin >> a[i];
   }
-  sort(a, a + k);
+  sort(a, a + k, greater<int>());
 
   int sz = 0;
   for (ll l = 1; l <= n; ) {
@@ -40,29 +27,16 @@ int main() {
     l = n / d + 1;
   }
   divs[sz++] = 0;
-  reverse(divs, divs + sz);
 
-  int k1 = min(k, 12);
-
-  for (int i = 0; i < k1; i++) {
-    for (int j = sz - 1, ptr = sz - 1; j >= 0; j--) {
-      // while (ptr >= 0 and divs[ptr] * a[i] > divs[j]) ptr--;
-      dp[j] += divs[ptr] - dp[ptr];
+  for (int i = 0; i < k; i++) {
+    for (int j = 0, ptr = 0; j < sz; j++) {
+      ll d = divs[j] / a[i];
+      while (ptr<sz and divs [ptr]> d) ptr++;
+      dp[j] += d - dp[ptr];
     }
   }
 
-  for (int i = 0; i < sz; i++) {
-    if (divs[i] >= N) {
-      dp2[n / divs[i]] = dp[i];
-    }
-  }
-  for (int i = sz - 1; i >= 0; i--) {
-    if (divs[i] < N) dp[divs[i]] = dp[i];
-  }
-
-  go(k1, 0, 1);
-
-  cout << ans << "\n";
+  cout << n - dp[0] << "\n";
 
   return 0;
 }
