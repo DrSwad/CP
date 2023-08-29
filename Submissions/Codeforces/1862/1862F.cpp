@@ -37,8 +37,8 @@ void test_case() {
       ll F = 1ll * f * seconds;
 
       if (W >= tot_s or F >= tot_s) return true;
-      auto low = prev(st.upper_bound((int)W));
-      return F >= tot_s - *low;
+      ll water_takes = *prev(st.upper_bound((int)W));
+      return F >= tot_s - water_takes;
     };
 
   int L = 0, R = 1e6;

@@ -1,0 +1,25 @@
+Test 578 Passed
+
+Input 578: 
+9
+ba
+ab
+aa
+aa
+ca
+ac
+bb
+cb
+ab
+
+
+Brute Force Output: 
+2
+
+
+Obtained Output: 
+2
+
+
+________________________________________________________
+

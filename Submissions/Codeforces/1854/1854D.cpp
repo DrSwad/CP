@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int k = 1e8;
+const int k_inf = 1e8;
+const int min_cycle_len = 31 * 4;
 
 bool query(int from, int steps, vector<int> st) {
   cout << "? " << from + 1 << " " << steps << " " << st.size();
@@ -20,28 +21,38 @@ void answer(vector<int> ans) {
   exit(EXIT_SUCCESS);
 }
 
-void brute_answer(int n, vector<int> cycle) {
-  vector<int> ans;
-  for (int i = 0; i < n; i++) {
-    if (query(i, k, cycle)) ans.push_back(i);
-  }
-  answer(ans);
-}
-
+// Costs 9 queries
 int brute_query(int n, int from, int steps) {
   vector<int> st(n);
   iota(st.begin(), st.end(), 0);
 
   while (st.size() > 1) {
     int sz = st.size();
-    vector<int> st1, st2;
-    for (int i = 0; i < sz / 2; i++) st1.push_back(st[i]);
-    for (int i = sz / 2; i < sz; i++) st2.push_back(st[i]);
+    vector<int> st1(st.begin(), st.begin() + sz / 2);
+    vector<int> st2(st.begin() + sz / 2, st.end());
     if (query(from, steps, st1)) swap(st, st1);
     else swap(st, st2);
   }
 
   return st[0];
+}
+
+void brute_answer(int n, int cycle_start) {
+  vector<int> cycle;
+  cycle.push_back(cycle_start);
+  do {
+    cycle.push_back(brute_query(n, cycle.back(), 1));
+  } while (cycle.back() != cycle_start);
+  cycle.pop_back();
+
+  vector<int> ans = cycle;
+  ans.push_back(0);
+  for (int i = 1; i < n; i++) {
+    if (find(cycle.begin(), cycle.end(), i) == cycle.end() and query(i, k_inf, cycle)) ans.push_back(i);
+  }
+  sort(ans.begin(), ans.end());
+  ans.resize(unique(ans.begin(), ans.end()) - ans.begin());
+  answer(ans);
 }
 
 int main() {
@@ -52,31 +63,55 @@ int main() {
   cin >> n;
 
   vector<int> cycle;
-  cycle.push_back(brute_query(n, 0, k));
-  cycle.push_back(brute_query(n, 0, k + 1));
-  cycle.push_back(brute_query(n, 0, k + 2));
+  int cycle_start = brute_query(n, 0, k_inf);
+  cycle.push_back(cycle_start);
+  cycle.push_back(brute_query(n, cycle_start, 1));
+  cycle.push_back(brute_query(n, cycle_start, 2));
+  cycle.push_back(brute_query(n, cycle_start, 3));
 
-  if (cycle[0] == cycle[1] or cycle[1] == cycle[2] or cycle[2] == cycle[0]) {
-    sort(cycle.begin(), cycle.end());
-    cycle.resize(unique(cycle.begin(), cycle.end()) - cycle.begin());
-    brute_answer(n, cycle);
+  if (cycle[1] == cycle_start or cycle[2] == cycle_start or cycle[3] == cycle_start) {
+    brute_answer(n, cycle_start);
   }
 
+  int cycle_len = 0;
+  int at = cycle_start;
   while (true) {
-    int nxt = brute_query(n, cycle.back(), 3);
-    if (find(cycle.begin(), cycle.end(), nxt) != cycle.end()) break;
-    cycle.push_back(nxt);
+    at = brute_query(n, at, 4);
+    cycle_len += 4;
+    bool stop = false;
+    for (int rem = 0; rem < 4; rem++) {
+      if (cycle[rem] == at) {
+        cycle_len -= rem;
+        stop = true;
+        break;
+      }
+    }
+    if (stop) break;
+    cycle.push_back(at);
   }
 
-  vector<int> state(n, -1);
-  for (int i : cycle) state[i] = 1;
+  if (cycle_len < min_cycle_len) brute_answer(n, cycle_start);
 
-  for (int i = 0; i < n; i++) {
-    if (state[i] != -1) continue;
-    int got0 = brute_query(n, 0, k);
-    cycle.push_back(brute_query(n, 0, k + 1));
-    cycle.push_back(brute_query(n, 0, k + 2));
+  int k[4];
+  k[0] = (k_inf - k_inf % cycle_len);
+  for (int i = 1; i < 4; i++) {
+    k[i] = k[i - 1] + 1;
   }
+
+  vector<int> ans = cycle;
+  ans.push_back(0);
+  for (int i = 1; i < n; i++) {
+    if (find(cycle.begin(), cycle.end(), i) != cycle.end()) continue;
+    for (int rem = 1; rem <= 4; rem++) {
+      if (query(i, k[rem % 4], cycle)) {
+        ans.push_back(i);
+        break;
+      }
+    }
+  }
+  sort(ans.begin(), ans.end());
+  ans.resize(unique(ans.begin(), ans.end()) - ans.begin());
+  answer(ans);
 
   return 0;
 }

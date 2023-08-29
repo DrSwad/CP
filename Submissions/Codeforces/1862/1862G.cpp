@@ -30,6 +30,7 @@ void test_case() {
 
   function<void(int, int)> remove =
     [&](int val, int at) {
+      // assert(a[at] == val);
       int nxt = -1, prv = -1;
 
       auto it = st.upper_bound(make_pair(val, at));

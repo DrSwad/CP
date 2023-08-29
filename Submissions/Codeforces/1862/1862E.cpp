@@ -11,18 +11,17 @@ void test_case() {
   for (int &i : a) cin >> i;
 
   ll ans = 0;
-  ll positive_sum = 0;
-
-  multiset<int> ms;
+  multiset<int> ms; // [0...i-1] porjonto at most (m-1)ta largest positives
+  ll ms_sum = 0;
 
   for (int i = 0; i < n; i++) {
     if (a[i] >= 0) {
-      positive_sum += a[i];
-      ans = max(ans, positive_sum - 1ll * (i + 1) * d);
+      ans = max(ans, ms_sum + a[i] - 1ll * (i + 1) * d);
 
+      ms_sum += a[i];
       ms.insert(a[i]);
-      if (ms.size() >= m) {
-        positive_sum -= *ms.begin();
+      if (ms.size() == m) {
+        ms_sum -= *ms.begin();
         ms.erase(ms.begin());
       }
     }
