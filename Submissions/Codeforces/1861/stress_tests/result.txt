@@ -1,0 +1,16 @@
+Test 10000 Passed
+
+Input 10000: 
+2 2
+
+
+Brute Force Output: 
+2
+
+
+Obtained Output: 
+2
+
+
+________________________________________________________
+

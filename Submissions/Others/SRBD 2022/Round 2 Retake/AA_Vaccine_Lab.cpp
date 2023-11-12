@@ -14,33 +14,37 @@ void test_case() {
   vector<vector<ll>> p(m, vector<ll>(n));
   for (auto &v : p) for (ll & i : v) cin >> i;
 
-  ll best_val = LLONG_MAX, min_cost = LLONG_MAX;
+  ll min_val = LLONG_MAX, min_cost = LLONG_MAX;
   vector<ll> rem_h = h;
 
-  function<void(int, ll)> dfs = [&](int i, ll curr_cost) {
-    if (i == m) {
-      ll curr_val = 0;
-      for (ll i : rem_h) curr_val += max(i, 0ll);
-      if (curr_val < best_val) {
-        best_val = curr_val;
-        min_cost = curr_cost;
+  function<void(int, ll)> dfs =
+    [&](int i, ll cur_cost) {
+      if (i == m) {
+        ll cur_val = 0;
+        for (ll i : rem_h) cur_val += max(i, 0ll);
+        if (cur_val < min_val) {
+          min_val = cur_val;
+          min_cost = cur_cost;
+        }
+        else if (cur_val == min_val) {
+          min_cost = min(min_cost, cur_cost);
+        }
+        return;
       }
-      return;
-    }
 
-    dfs(i + 1, curr_cost);
+      dfs(i + 1, cur_cost);
 
-    for (int it = 0; it < 2; it++) {
+      for (int it = 0; it < 2; it++) {
+        for (int j = 0; j < n; j++) {
+          rem_h[j] -= p[i][j];
+        }
+        cur_cost += c[i];
+        dfs(i + 1, cur_cost);
+      }
       for (int j = 0; j < n; j++) {
-        rem_h[j] -= p[i][j];
+        rem_h[j] += 2ll * p[i][j];
       }
-      curr_cost += c[i];
-      dfs(i + 1, curr_cost);
-    }
-    for (int j = 0; j < n; j++) {
-      rem_h[j] += 2ll * p[i][j];
-    }
-  };
+    };
 
   dfs(0, 0);
 

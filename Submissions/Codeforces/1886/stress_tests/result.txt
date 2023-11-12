@@ -1,0 +1,35 @@
+Test 2042 Passed
+
+Input 2042: 
+7
+3
+6
+8
+5
+6
+2
+1
+
+
+Brute Force Output: 
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+
+
+Obtained Output: 
+NO
+NO
+YES
+NO
+NO
+NO
+NO
+
+
+________________________________________________________
+
