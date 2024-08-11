@@ -1,49 +1,70 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
+const int N = 20;
+const int inf = 1e9;
+
+int tot_cities;
+int cost[N][N];
+map<pair<int, vector<bool>>, int> dp;
+
+// if I start from `0` and I need to finish at the node `at`,
+// while visiting all the nodes indicated by `vis`, the
+// DP calculates the minimum cost I need to travel
+int DP(int at, vector<bool> vis) {
+  pair<int, vector<bool>> state = {at, vis};
+  if (dp.find(state) != dp.end()) return dp[state];
+  dp[state] = inf;
+
+  // since we began at `0`, `vis[0]` must be `true` in a valid state
+  if (vis[0] != true) return inf;
+
+  // iterate over the city `from`, which came immediate before `at` in the journey
+  vis[at] = false;
+  for (int from = 0; from < tot_cities; from++) {
+    if (vis[from]) {
+      dp[state] = min(dp[state], cost[from][at] + DP(from, vis));
+    }
+  }
+
+  return dp[state];
+}
+
 int main() {
-	int t;
-	scanf("%d", &t);
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
 
-	while (t--) {
-		int n;
-		scanf("%d", &n);
+  int t;
+  cin >> t;
 
-		vector<vector<int>> cost(n, vector<int>(n));
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				scanf("%d", &cost[i][j]);
-			}
-		}
+  while (t--) {
+    cin >> tot_cities;
 
-		vector<vector<int>> dp(1 << n, vector<int>(n, -1));
-		dp[1 << 0][0] = 0;
+    for (int from = 0; from < tot_cities; from++) {
+      for (int to = 0; to < tot_cities; to++) {
+        cin >> cost[from][to];
+      }
+    }
 
-		for (int mask = 3; mask < 1 << n; mask += 2) {
-			for (int last = 0; last < n; last++) {
-				if (mask >> last & 1) {
-					int prv_mask = mask ^ 1 << last;
-					for (int prv = 0; prv < n; prv++) {
-						if (prv_mask >> prv & 1 and dp[prv_mask][prv] != -1) {
-							int &ans = dp[mask][last];
-							int cur = dp[prv_mask][prv] + cost[prv][last];
-							ans = ans == -1 ? cur : min(ans, cur);
-						}
-					}
-				}
-			}
-		}
+    dp.clear();
 
-		int ans = INT_MAX;
-		int full_mask = (1 << n) - 1;
-		for (int i = 0; i < n; i++) {
-			if (dp[full_mask][i] != -1) {
-				ans = min(ans, dp[full_mask][i] + cost[i][0]);
-			}
-		}
+    // at the start, only city `0` visited and we're standing there
+    int source = 0;
+    vector<bool> start_vis(tot_cities, false);
+    start_vis[source] = true;
+    dp[make_pair(source, start_vis)] = 0;
 
-		printf("%d\n", ans);
-	}
+    // at the end, all the cities must be visited
+    vector<bool> end_vis(tot_cities, true);
 
-	return 0;
+    // iterate over which city was last visited before completing the cycle by returning back to city `0`
+    int ans = INT_MAX;
+    for (int last_city = 0; last_city < tot_cities; last_city++) {
+      ans = min(ans, DP(last_city, end_vis) + cost[last_city][0]);
+    }
+
+    cout << ans << "\n";
+  }
+
+  return 0;
 }

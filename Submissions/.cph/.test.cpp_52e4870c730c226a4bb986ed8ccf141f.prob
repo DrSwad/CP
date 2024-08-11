@@ -1,1 +1,0 @@
-{"name":"Local: test","url":"/Users/drswad/Desktop/CP/Submissions/test.cpp","tests":[{"id":1694162208941,"input":"3\n5 3\n8 1\n9 5","output":"****\n***\n**\n*"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/drswad/Desktop/CP/Submissions/test.cpp","group":"local","local":true}
