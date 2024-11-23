@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
+
+const double EPS = 1e-9;
+
+bool can_deliver(const vector<pair<int, int>>& stations, double speed) {
+    double time = 0;
+    for (const auto& station : stations) {
+        time = max(time, (double)station.first / speed);
+        if (time > station.second) return false;
+    }
+    return true;
+}
+
+double solve(const vector<pair<int, int>>& stations) {
+    double low = 0, high = 1e9;
+    while (high - low > EPS) {
+        double mid = (low + high) / 2;
+        if (can_deliver(stations, mid)) {
+            high = mid;
+        } else {
+            low = mid;
+        }
+    }
+    return high;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int T;
+    cin >> T;
+
+    for (int case_num = 1; case_num <= T; ++case_num) {
+        int N;
+        cin >> N;
+
+        vector<pair<int, int>> stations(N);
+        for (int i = 0; i < N; ++i) {
+            int A, B;
+            cin >> A >> B;
+            stations[i] = {i + 1, B};
+        }
+
+        double result = solve(stations);
+
+        cout << "Case #" << case_num << ": ";
+        if (result > 1e8) {
+            cout << -1 << endl;
+        } else {
+            cout << fixed << setprecision(7) << result << endl;
+        }
+    }
+
+    return 0;
+}
